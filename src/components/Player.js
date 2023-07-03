@@ -136,250 +136,250 @@
 
 // export default App;
 //----------------------------------------------------------
-import React, { useState } from "react";
-import Player from "./Player";
-import ModalOverlay from "./ModalOverlay";
-import Backdrop from "./Backdrop";
+// import React, { useState } from "react";
+// import Player from "./Player";
+// import ModalOverlay from "./ModalOverlay";
+// import Backdrop from "./Backdrop";
 
-const getRandomNumber = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+// const getRandomNumber = (min, max) => {
+//   return Math.floor(Math.random() * (max - min + 1)) + min;
+// };
 
-const App = () => {
-  const [players, setPlayers] = useState([
-    { id: 1, score: getRandomNumber(1, 100), steps: 0, turn: true },
-    { id: 2, score: getRandomNumber(1, 100), steps: 0, turn: false },
-  ]);
-  const [gameOver, setGameOver] = useState(false);
-  const [winner, setWinner] = useState("");
-  const [showModal, setShowModal] = useState(false);
+// const App = () => {
+//   const [players, setPlayers] = useState([
+//     { id: 1, score: getRandomNumber(1, 100), steps: 0, turn: true },
+//     { id: 2, score: getRandomNumber(1, 100), steps: 0, turn: false },
+//   ]);
+//   const [gameOver, setGameOver] = useState(false);
+//   const [winner, setWinner] = useState("");
+//   const [showModal, setShowModal] = useState(false);
 
-  const handleIncrement = (newScore, steps, playerId) => {
-    setPlayers((prevPlayers) =>
-      prevPlayers.map((player) =>
-        player.id === playerId
-          ? { ...player, score: newScore, steps: steps, turn: false }
-          : { ...player, turn: true }
-      )
-    );
+//   const handleIncrement = (newScore, steps, playerId) => {
+//     setPlayers((prevPlayers) =>
+//       prevPlayers.map((player) =>
+//         player.id === playerId
+//           ? { ...player, score: newScore, steps: steps, turn: false }
+//           : { ...player, turn: true }
+//       )
+//     );
 
-    const currentPlayer = players.find((player) => player.id === playerId);
-    if (newScore === 100) {
-      setGameOver(true);
-      setWinner(`Player ${currentPlayer.id}`);
-      setShowModal(true);
-    }
-  };
+//     const currentPlayer = players.find((player) => player.id === playerId);
+//     if (newScore === 100) {
+//       setGameOver(true);
+//       setWinner(`Player ${currentPlayer.id}`);
+//       setShowModal(true);
+//     }
+//   };
 
-  const handleDelete = (playerId) => {
-    setPlayers((prevPlayers) =>
-      prevPlayers.filter((player) => player.id !== playerId)
-    );
-  };
+//   const handleDelete = (playerId) => {
+//     setPlayers((prevPlayers) =>
+//       prevPlayers.filter((player) => player.id !== playerId)
+//     );
+//   };
 
-  const handleReset = () => {
-    setPlayers((prevPlayers) =>
-      prevPlayers.map((player) => ({
-        ...player,
-        score: getRandomNumber(1, 100),
-        steps: 0,
-        turn: player.id === 1 ? true : false,
-      }))
-    );
-    setGameOver(false);
-    setWinner("");
-    setShowModal(false);
-  };
+//   const handleReset = () => {
+//     setPlayers((prevPlayers) =>
+//       prevPlayers.map((player) => ({
+//         ...player,
+//         score: getRandomNumber(1, 100),
+//         steps: 0,
+//         turn: player.id === 1 ? true : false,
+//       }))
+//     );
+//     setGameOver(false);
+//     setWinner("");
+//     setShowModal(false);
+//   };
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
+//   const closeModal = () => {
+//     setShowModal(false);
+//   };
 
-  return (
-    <div>
-      <h1>Game</h1>
-      {players.map((player) => (
-        <Player
-          key={player.id}
-          playerId={player.id}
-          initialScore={player.score}
-          handleIncrement={handleIncrement}
-          handleDelete={handleDelete}
-          turn={player.turn}
-          gameOver={gameOver}
-        />
-      ))}
-      {showModal && (
-        <React.Fragment>
-          <ModalOverlay
-            winner={winner}
-            steps={
-              players.find(
-                (player) => player.id === Number(winner.split(" ")[1])
-              ).steps
-            }
-            handleReset={handleReset}
-            onClick={closeModal}
-          />
-          <Backdrop onClick={closeModal} />
-        </React.Fragment>
-      )}
-    </div>
-  );
-};
+//   return (
+//     <div>
+//       <h1>Game</h1>
+//       {players.map((player) => (
+//         <Player
+//           key={player.id}
+//           playerId={player.id}
+//           initialScore={player.score}
+//           handleIncrement={handleIncrement}
+//           handleDelete={handleDelete}
+//           turn={player.turn}
+//           gameOver={gameOver}
+//         />
+//       ))}
+//       {showModal && (
+//         <React.Fragment>
+//           <ModalOverlay
+//             winner={winner}
+//             steps={
+//               players.find(
+//                 (player) => player.id === Number(winner.split(" ")[1])
+//               ).steps
+//             }
+//             handleReset={handleReset}
+//             onClick={closeModal}
+//           />
+//           <Backdrop onClick={closeModal} />
+//         </React.Fragment>
+//       )}
+//     </div>
+//   );
+// };
 
-export default App;
-///
-import React from 'react';
+// export default App;
+// ///
+// import React from 'react';
 
-const Player = (props) => {
-  const { playerId, initialScore, handleIncrement, handleDelete, turn, gameOver } = props;
+// const Player = (props) => {
+//   const { playerId, initialScore, handleIncrement, handleDelete, turn, gameOver } = props;
 
-  const handleClick = (operation) => {
-    if (turn && !gameOver) {
-      let newScore = initialScore;
-      let steps = props.steps;
-      
-      switch (operation) {
-        case 'add':
-          newScore += 1;
-          steps += 1;
-          break;
-        case 'subtract':
-          newScore -= 1;
-          steps += 1;
-          break;
-        case 'multiply':
-          newScore *= 2;
-          steps += 1;
-          break;
-        case 'divide':
-          newScore /= 2;
-          steps += 1;
-          break;
-        default:
-          break;
-      }
+//   const handleClick = (operation) => {
+//     if (turn && !gameOver) {
+//       let newScore = initialScore;
+//       let steps = props.steps;
 
-      handleIncrement(newScore, steps, playerId);
-    }
-  };
+//       switch (operation) {
+//         case 'add':
+//           newScore += 1;
+//           steps += 1;
+//           break;
+//         case 'subtract':
+//           newScore -= 1;
+//           steps += 1;
+//           break;
+//         case 'multiply':
+//           newScore *= 2;
+//           steps += 1;
+//           break;
+//         case 'divide':
+//           newScore /= 2;
+//           steps += 1;
+//           break;
+//         default:
+//           break;
+//       }
 
-  const handleDeleteClick = () => {
-    handleDelete(playerId);
-  };
+//       handleIncrement(newScore, steps, playerId);
+//     }
+//   };
 
-  return (
-    <div>
-      <h2>Player {playerId}</h2>
-      <p>Score: {initialScore}</p>
-      <button onClick={() => handleClick('add')} disabled={!turn || gameOver}>
-        Add 1
-      </button>
-      <button onClick={() => handleClick('subtract')} disabled={!turn || gameOver}>
-        Subtract 1
-      </button>
-      <button onClick={() => handleClick('multiply')} disabled={!turn || gameOver}>
-        Multiply by 2
-      </button>
-      <button onClick={() => handleClick('divide')} disabled={!turn || gameOver}>
-        Divide by 2
-      </button>
-      <button onClick={handleDeleteClick}>Delete</button>
-    </div>
-  );
-};
+//   const handleDeleteClick = () => {
+//     handleDelete(playerId);
+//   };
 
-export default Player;
-///////////
-import React, { useState } from 'react';
-import Player from './Player';
-import ModalOverlay from './ModalOverlay';
-import Backdrop from './Backdrop';
+//   return (
+//     <div>
+//       <h2>Player {playerId}</h2>
+//       <p>Score: {initialScore}</p>
+//       <button onClick={() => handleClick('add')} disabled={!turn || gameOver}>
+//         Add 1
+//       </button>
+//       <button onClick={() => handleClick('subtract')} disabled={!turn || gameOver}>
+//         Subtract 1
+//       </button>
+//       <button onClick={() => handleClick('multiply')} disabled={!turn || gameOver}>
+//         Multiply by 2
+//       </button>
+//       <button onClick={() => handleClick('divide')} disabled={!turn || gameOver}>
+//         Divide by 2
+//       </button>
+//       <button onClick={handleDeleteClick}>Delete</button>
+//     </div>
+//   );
+// };
 
-const getRandomNumber = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+// export default Player;
+// ///////////
+// import React, { useState } from 'react';
+// import Player from './Player';
+// import ModalOverlay from './ModalOverlay';
+// import Backdrop from './Backdrop';
 
-const App = () => {
-  const [players, setPlayers] = useState([]);
-  const [gameOver, setGameOver] = useState(false);
-  const [winner, setWinner] = useState('');
-  const [showModal, setShowModal] = useState(false);
+// const getRandomNumber = (min, max) => {
+//   return Math.floor(Math.random() * (max - min + 1)) + min;
+// };
 
-  const handleAddPlayer = () => {
-    const newPlayer = {
-      id: players.length + 1,
-      score: getRandomNumber(1, 100),
-      steps: 0,
-      turn: players.length === 0 ? true : false
-    };
+// const App = () => {
+//   const [players, setPlayers] = useState([]);
+//   const [gameOver, setGameOver] = useState(false);
+//   const [winner, setWinner] = useState('');
+//   const [showModal, setShowModal] = useState(false);
 
-    setPlayers(prevPlayers => [...prevPlayers, newPlayer]);
-  };
+//   const handleAddPlayer = () => {
+//     const newPlayer = {
+//       id: players.length + 1,
+//       score: getRandomNumber(1, 100),
+//       steps: 0,
+//       turn: players.length === 0 ? true : false
+//     };
 
-  const handleIncrement = (newScore, steps, playerId) => {
-    setPlayers(prevPlayers =>
-      prevPlayers.map(player =>
-        player.id === playerId
-          ? { ...player, score: newScore, steps: steps, turn: false }
-          : { ...player, turn: true }
-      )
-    );
+//     setPlayers(prevPlayers => [...prevPlayers, newPlayer]);
+//   };
 
-    const currentPlayer = players.find(player => player.id === playerId);
-    if (newScore === 100) {
-      setGameOver(true);
-      setWinner(`Player ${currentPlayer.id}`);
-      setShowModal(true);
-    }
-  };
+//   const handleIncrement = (newScore, steps, playerId) => {
+//     setPlayers(prevPlayers =>
+//       prevPlayers.map(player =>
+//         player.id === playerId
+//           ? { ...player, score: newScore, steps: steps, turn: false }
+//           : { ...player, turn: true }
+//       )
+//     );
 
-  const handleDelete = (playerId) => {
-    setPlayers(prevPlayers =>
-      prevPlayers.filter(player => player.id !== playerId)
-    );
-  };
+//     const currentPlayer = players.find(player => player.id === playerId);
+//     if (newScore === 100) {
+//       setGameOver(true);
+//       setWinner(`Player ${currentPlayer.id}`);
+//       setShowModal(true);
+//     }
+//   };
 
-  const handleReset = () => {
-    setPlayers([]);
-    setGameOver(false);
-    setWinner('');
-    setShowModal(false);
-  };
+//   const handleDelete = (playerId) => {
+//     setPlayers(prevPlayers =>
+//       prevPlayers.filter(player => player.id !== playerId)
+//     );
+//   };
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
+//   const handleReset = () => {
+//     setPlayers([]);
+//     setGameOver(false);
+//     setWinner('');
+//     setShowModal(false);
+//   };
 
-  return (
-    <div>
-      <h1>Game</h1>
-      <button onClick={handleAddPlayer}>Add Player</button>
-      {players.map(player => (
-        <Player
-          key={player.id}
-          playerId={player.id}
-          initialScore={player.score}
-          handleIncrement={handleIncrement}
-          handleDelete={handleDelete}
-          turn={player.turn}
-          gameOver={gameOver}
-        />
-      ))}
-      {showModal && (
-        <React.Fragment>
-          <ModalOverlay
-            winner={winner}
-            steps={players.find(player => player.id === Number(winner.split(' ')[1])).steps}
-            handleReset={handleReset}
-            onClick={closeModal}
-          />
-          <Backdrop onClick={closeModal} />
-        </React.Fragment>
-      )}
-    </div>
-  );
-};
+//   const closeModal = () => {
+//     setShowModal(false);
+//   };
 
-export default App;
+//   return (
+//     <div>
+//       <h1>Game</h1>
+//       <button onClick={handleAddPlayer}>Add Player</button>
+//       {players.map(player => (
+//         <Player
+//           key={player.id}
+//           playerId={player.id}
+//           initialScore={player.score}
+//           handleIncrement={handleIncrement}
+//           handleDelete={handleDelete}
+//           turn={player.turn}
+//           gameOver={gameOver}
+//         />
+//       ))}
+//       {showModal && (
+//         <React.Fragment>
+//           <ModalOverlay
+//             winner={winner}
+//             steps={players.find(player => player.id === Number(winner.split(' ')[1])).steps}
+//             handleReset={handleReset}
+//             onClick={closeModal}
+//           />
+//           <Backdrop onClick={closeModal} />
+//         </React.Fragment>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default App;
