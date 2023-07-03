@@ -34,32 +34,33 @@ function App() {
 
   const handleDelete = (playerId) => {
     console.log(playerId);
+
     setPlayers((prevPlayers) => {
       const updatedPlayer = prevPlayers.filter(
         (player) => player.id !== playerId
       );
-      console.log("updated", updatedPlayer);
-      console.log("hi delete app.js");
       return updatedPlayer;
     });
+    if (players.length === 1) {
+      setIsShow(true);
+    }
   };
 
-  const opHandeler = (palyerName, newScore, steps) => {
-    setPlayers((prev) => {
-      const currPlayer = prev.find((player) => palyerName === player.name);
-      // currPlayer.name = palyerName;
-      currPlayer.steps = steps;
-      currPlayer.score = newScore;
-      currPlayer.turn = true;
+  const opHandeler = (playerId, newScore, steps) => {
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((player) =>
+        player.id === playerId
+          ? { ...player, score: newScore, steps: steps, turn: false }
+          : { ...player, turn: true }
+      )
+    );
 
-      if (newScore === 100) {
-        setGameOver(true);
-
-        setWinner(currPlayer.name);
-        setNumSteps(steps);
-      }
-      return [...prev];
-    });
+    const currentPlayer = players.find((player) => player.id === playerId);
+    if (newScore === 100) {
+      setGameOver(true);
+      setWinner(currentPlayer.name);
+      setNumSteps(steps);
+    }
   };
   const startGame = () => {
     if (players.length >= 2) {
@@ -67,7 +68,7 @@ function App() {
     } else {
       setError({
         title: "Invalid input!!",
-        message: "two players at least to start the game ",
+        message: "Two players at least to start the game. ",
       });
     }
   };
@@ -85,7 +86,7 @@ function App() {
       <h1>Get To 100</h1>
       {isShow && <AddPlayer onAdd={addPlayerHandler} />}
 
-      <Button onClick={startGame}>Start Playing</Button>
+      {isShow && <Button onClick={startGame}>Start Playing</Button>}
       {error && (
         <ErrorModal
           title={error.title}

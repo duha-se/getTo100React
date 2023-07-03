@@ -15,32 +15,36 @@ const Game = ({
   const operationHandeler = (operation) => {
     let newScore;
     if (turn && !gameOver) {
-      if (operation === "add") {
-        newScore = score + 1;
-        return;
-      } else if (operation === "subtract") {
-        newScore = score - 1;
-        return;
-      } else if (operation === "multiply") {
-        newScore = score * 2;
-        return;
-      } else if (operation === "divide") {
-        newScore = score / 2;
-        return;
+      switch (operation) {
+        case "add":
+          newScore = score + 1;
+          steps += 1;
+          break;
+        case "subtract":
+          newScore = score - 1;
+          steps += 1;
+          break;
+        case "multiply":
+          newScore = score * 2;
+          steps += 1;
+          break;
+        case "divide":
+          newScore = score / 2;
+          steps += 1;
+          break;
+        default:
+          break;
       }
 
-      opHandeler(name, newScore, steps + 1);
+      opHandeler(playerId, newScore, steps);
     }
   };
   const handleDeleteClick = () => {
-    console.log("hi delete game.js");
-    console.log(playerId);
     onDelete(playerId);
   };
   return (
     <div>
       <p>
-        {" "}
         Player {playerId} Name : {name}
       </p>
       <label>Score : {score}</label>
@@ -75,8 +79,6 @@ const Game = ({
             ÷2
           </Button>
           <Button onClick={handleDeleteClick}>Quit</Button>
-
-          {/* <Button onClick={handleReset}>Restart</Button> */}
         </div>
       )}
     </div>

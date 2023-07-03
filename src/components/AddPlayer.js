@@ -30,7 +30,13 @@ export default function AddPlayer(props) {
           onConfirm={errorHandler}
         />
       )}
-      <input ref={nameInputRef} placeholder="Your Name" type="text" required />
+      <input
+        name="enteredName"
+        ref={nameInputRef}
+        placeholder="Your Name"
+        type="text"
+        required
+      />
       &nbsp;
       <Button onClick={addPlayer}>Add Player</Button>
     </div>
